@@ -11,6 +11,9 @@ export default function CarritoPage() {
   const { cartItems, removeFromCart, clearCart } = useCart();
   const [nombreCliente, setNombreCliente] = useState("");
 
+  // 🔹 ESTADOS PARA NAVBAR (solo para TypeScript)
+  const [search, setSearch] = useState("");
+
   // 🔹 control de modales
   const [mostrarPago, setMostrarPago] = useState(false);
   const [mostrarQR, setMostrarQR] = useState(false);
@@ -37,11 +40,14 @@ export default function CarritoPage() {
         })),
       };
 
-      const res = await fetch("https://minimarket-jk-backend.onrender.com/api/pedidos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(pedido),
-      });
+      const res = await fetch(
+        "https://minimarket-jk-backend.onrender.com/api/pedidos",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(pedido),
+        }
+      );
 
       if (!res.ok) throw new Error("Error al guardar pedido");
 
@@ -58,7 +64,8 @@ export default function CarritoPage() {
 
   return (
     <div className="min-h-screen bg-white text-black">
-      <Navbar />
+      {/* ✅ Navbar con props obligatorias */}
+      <Navbar search={search} onSearch={setSearch} />
 
       <main className="flex flex-col items-center p-6">
         <h1 className="text-xl font-semibold mb-4">
@@ -78,9 +85,7 @@ export default function CarritoPage() {
           </div>
         ) : (
           <>
-            {/* 👇 MISMA DISTRIBUCIÓN ORIGINAL */}
             <div className="flex flex-col md:flex-row items-center md:items-start gap-10">
-              {/* 🛒 IMAGEN IZQUIERDA */}
               <div className="text-center">
                 <img
                   src="https://cdn-icons-png.flaticon.com/512/107/107831.png"
@@ -89,7 +94,6 @@ export default function CarritoPage() {
                 />
               </div>
 
-              {/* 📋 TABLA DERECHA */}
               <table className="border border-gray-400 text-center">
                 <thead>
                   <tr className="bg-purple-300">
@@ -121,7 +125,6 @@ export default function CarritoPage() {
               </table>
             </div>
 
-            {/* 🔽 PARTE INFERIOR (IGUAL QUE ANTES) */}
             <div className="mt-6 flex flex-col md:flex-row items-center gap-4">
               <h2 className="text-lg font-bold">
                 Total: ${total.toFixed(2)}
@@ -155,7 +158,6 @@ export default function CarritoPage() {
         )}
       </main>
 
-      {/* 🧾 MODAL MÉTODO DE PAGO */}
       <PaymentModal
         visible={mostrarPago}
         onClose={() => setMostrarPago(false)}
@@ -169,7 +171,6 @@ export default function CarritoPage() {
         }}
       />
 
-      {/* 📱 MODAL QR DEUNA */}
       <DeUnaQRModal
         visible={mostrarQR}
         onClose={() => setMostrarQR(false)}
