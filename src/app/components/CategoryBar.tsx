@@ -3,28 +3,14 @@ import { useState } from "react";
 
 /* ---------- PROPS ---------- */
 interface CategoryBarProps {
+  categorias: string[];
   categoriaActiva?: string;
   onSelect?: (categoria: string) => void;
 }
 
-/* ---------- CATEGORÍAS FIJAS ---------- */
-const CATEGORIAS = [
-  "Abarrotes",
-  "Bebidas alcohólicas",
-  "Bebidas no alcohólicas",
-  "Snacks",
-  "Confitería",
-  "Lácteos",
-  "Cárnicos",
-  "Cárnicos congelados",
-  "Verduras",
-  "Productos de aseo",
-  "Papelería",
-  "Productos de aseo del hogar",
-];
-
 /* ---------- COMPONENTE ---------- */
 export default function CategoryBar({
+  categorias,
   categoriaActiva = "todas",
   onSelect,
 }: CategoryBarProps) {
@@ -35,12 +21,12 @@ export default function CategoryBar({
     if (typeof onSelect === "function") onSelect(cat);
   };
 
-  const maxIndex = Math.max(CATEGORIAS.length - VISIBLE, 0);
-  const visibles = CATEGORIAS.slice(start, start + VISIBLE);
+  const maxIndex = Math.max(categorias.length - VISIBLE, 0);
+  const visibles = categorias.slice(start, start + VISIBLE);
 
   return (
     <div style={containerStyle}>
-      {CATEGORIAS.length > VISIBLE && (
+      {categorias.length > VISIBLE && (
         <button
           onClick={() => setStart((p) => Math.max(p - 1, 0))}
           style={arrowStyle}
@@ -70,7 +56,7 @@ export default function CategoryBar({
         </div>
       ))}
 
-      {CATEGORIAS.length > VISIBLE && (
+      {categorias.length > VISIBLE && (
         <button
           onClick={() => setStart((p) => Math.min(p + 1, maxIndex))}
           style={arrowStyle}
@@ -82,7 +68,7 @@ export default function CategoryBar({
   );
 }
 
-/* ---------- ESTILOS ---------- */
+/* ---------- ESTILOS (SIN CAMBIOS) ---------- */
 const containerStyle: React.CSSProperties = {
   backgroundColor: "#b36a5e",
   display: "flex",
