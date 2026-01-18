@@ -4,19 +4,27 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+interface Usuario {
+  id: number;
+  nombre: string;
+  correo: string;
+}
+
 export default function UsuariosAdminPage() {
-  const [usuarios, setUsuarios] = useState([]);
-  const [cargando, setCargando] = useState(true);
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  const [cargando, setCargando] = useState<boolean>(true);
   const router = useRouter();
 
   useEffect(() => {
     traerUsuarios();
   }, []);
 
-  const traerUsuarios = async () => {
+  const traerUsuarios = async (): Promise<void> => {
     try {
-      const res = await fetch("https://minimarket-jk-backend.onrender.com/api/usuarios/listar");
-      const data = await res.json();
+      const res = await fetch(
+        "https://minimarket-jk-backend.onrender.com/api/usuarios/listar"
+      );
+      const data: Usuario[] = await res.json();
       setUsuarios(data);
     } catch (error) {
       console.error("Error al obtener usuarios", error);
@@ -25,16 +33,19 @@ export default function UsuariosAdminPage() {
     }
   };
 
-  const eliminarUsuario = async (id) => {
+  const eliminarUsuario = async (id: number): Promise<void> => {
     if (!confirm("¿Seguro deseas eliminar este usuario?")) return;
 
     try {
-      const res = await fetch(`https://minimarket-jk-backend.onrender.com/api/usuarios/${id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `https://minimarket-jk-backend.onrender.com/api/usuarios/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (res.ok) {
-        setUsuarios(usuarios.filter((u) => u.id !== id));
+        setUsuarios((prev) => prev.filter((u) => u.id !== id));
       }
     } catch (error) {
       console.error("Error al eliminar usuario", error);
@@ -50,7 +61,6 @@ export default function UsuariosAdminPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-10">
-
       {/* Encabezado */}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-4xl font-bold text-gray-800">
@@ -67,14 +77,12 @@ export default function UsuariosAdminPage() {
 
       {/* Contenedor */}
       <div className="bg-white w-full max-w-3xl mx-auto shadow-xl rounded-xl p-6">
-
         {usuarios.length === 0 ? (
           <p className="text-center text-gray-500 py-10">
             No hay usuarios registrados.
           </p>
         ) : (
           <div className="divide-y">
-
             {usuarios.map((u) => (
               <div
                 key={u.id}
@@ -86,10 +94,11 @@ export default function UsuariosAdminPage() {
                 </div>
 
                 <div className="flex gap-3">
-
                   {/* Editar */}
                   <button
-                    onClick={() => router.push(`/admin/usuarios/editar/${u.id}`)}
+                    onClick={() =>
+                      router.push(`/admin/usuarios/editar/${u.id}`)
+                    }
                     className="px-3 py-1 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700"
                   >
                     Editar
@@ -102,11 +111,9 @@ export default function UsuariosAdminPage() {
                   >
                     Eliminar
                   </button>
-
                 </div>
               </div>
             ))}
-
           </div>
         )}
       </div>
