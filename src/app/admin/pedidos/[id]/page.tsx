@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 
 export default function PedidoDetalleCliente() {
   const params = useParams();
-  const id = params.id as string; 
+  const id = params.id as string;
 
   const [pedido, setPedido] = useState<any>(null);
 
@@ -59,13 +59,12 @@ export default function PedidoDetalleCliente() {
           <p>
             <b>Estado:</b>{" "}
             <span
-              className={`px-3 py-1 rounded-full text-white ${
-                pedido.estado === "Completado"
+              className={`px-3 py-1 rounded-full text-white ${pedido.estado === "Completado"
                   ? "bg-green-600"
                   : pedido.estado === "Cancelado"
-                  ? "bg-red-600"
-                  : "bg-yellow-600"
-              }`}
+                    ? "bg-red-600"
+                    : "bg-yellow-600"
+                }`}
             >
               {pedido.estado}
             </span>
@@ -74,11 +73,10 @@ export default function PedidoDetalleCliente() {
           <p>
             <b>Método de pago:</b>{" "}
             <span
-              className={`px-4 py-1 rounded-full text-white ${
-                pedido.metodoPago === "EFECTIVO"
+              className={`px-4 py-1 rounded-full text-white ${pedido.metodoPago === "EFECTIVO"
                   ? "bg-green-600"
                   : "bg-purple-600"
-              }`}
+                }`}
             >
               {pedido.metodoPago}
             </span>
@@ -91,18 +89,18 @@ export default function PedidoDetalleCliente() {
 
         <table className="w-full border rounded-lg overflow-hidden">
           <thead>
-            <tr className="bg-amber-600 text-white">
-              <th className="border px-4 py-2">Producto</th>
-              <th className="border px-4 py-2">Cantidad</th>
-              <th className="border px-4 py-2">Precio</th>
+            <tr className="bg-blue-600 text-white">
+              <th className="border border-black px-4 py-2">Producto</th>
+              <th className="border border-black px-4 py-2">Cantidad</th>
+              <th className="border border-black px-4 py-2">Precio</th>
             </tr>
           </thead>
           <tbody>
             {pedido.productos.map((prod: any, index: number) => (
               <tr key={index} className="text-center">
-                <td className="border px-4 py-2">{prod.nombre}</td>
-                <td className="border px-4 py-2">{prod.PedidoProducto.cantidad}</td>
-                <td className="border px-4 py-2">${prod.precio}</td>
+                <td className="border border-black px-4 py-2">{prod.nombre}</td>
+                <td className="border border-black px-4 py-2">{prod.PedidoProducto.cantidad}</td>
+                <td className="border border-black px-4 py-2">${prod.precio}</td>
               </tr>
             ))}
           </tbody>
