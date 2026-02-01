@@ -1,14 +1,12 @@
 "use client";
 import { useState } from "react";
 
-/* ---------- PROPS ---------- */
 interface CategoryBarProps {
   categorias: string[];
   categoriaActiva?: string;
   onSelect?: (categoria: string) => void;
 }
 
-/* ---------- COMPONENTE ---------- */
 export default function CategoryBar({
   categorias,
   categoriaActiva = "todas",
@@ -25,41 +23,55 @@ export default function CategoryBar({
   const visibles = categorias.slice(start, start + VISIBLE);
 
   return (
-    <div style={containerStyle}>
+    /* Contenedor principal con tu color y centrado */
+    <div className="bg-[#b36a5e] flex items-center justify-center gap-2 sm:gap-4 px-2 py-3 sm:px-6 rounded-b-[40px] mb-5 shadow-md">
+      
+      {/* Flecha Izquierda */}
       {categorias.length > VISIBLE && (
         <button
           onClick={() => setStart((p) => Math.max(p - 1, 0))}
-          style={arrowStyle}
+          className="bg-white/20 border-none rounded-full text-white text-xl cursor-pointer w-9 h-9 flex items-center justify-center shrink-0 hover:bg-white/30 transition-colors"
         >
           ‹
         </button>
       )}
 
-      {/* TODAS */}
+      {/* BOTÓN TODAS */}
       <button
         onClick={() => handleSelect("todas")}
-        style={buttonStyle(categoriaActiva === "todas")}
+        className={`bg-transparent border-none font-bold cursor-pointer pb-1.5 whitespace-nowrap transition-all text-sm sm:text-[1.2rem] border-b-[3px] ${
+          categoriaActiva === "todas" 
+            ? "border-[#4fc3f7] text-white" 
+            : "border-transparent text-white/80"
+        }`}
       >
         Todas
       </button>
 
+      {/* CATEGORÍAS DINÁMICAS */}
       {visibles.map((cat) => (
-        <div key={cat} style={itemWrapper}>
-          <div style={lineSeparator} />
+        <div key={cat} className="flex items-center gap-2 sm:gap-3">
+          {/* Línea separadora vertical (se adapta al tamaño en móvil) */}
+          <div className="w-[1px] h-5 bg-white/40 mx-0.5 sm:mx-1" />
 
           <button
             onClick={() => handleSelect(cat)}
-            style={buttonStyle(categoriaActiva === cat)}
+            className={`bg-transparent border-none font-bold cursor-pointer pb-1.5 whitespace-nowrap transition-all text-sm sm:text-[1.2rem] capitalize border-b-[3px] ${
+              categoriaActiva === cat 
+                ? "border-[#4fc3f7] text-white" 
+                : "border-transparent text-white/80"
+            }`}
           >
             {cat}
           </button>
         </div>
       ))}
 
+      {/* Flecha Derecha */}
       {categorias.length > VISIBLE && (
         <button
           onClick={() => setStart((p) => Math.min(p + 1, maxIndex))}
-          style={arrowStyle}
+          className="bg-white/20 border-none rounded-full text-white text-xl cursor-pointer w-9 h-9 flex items-center justify-center shrink-0 hover:bg-white/30 transition-colors"
         >
           ›
         </button>
@@ -67,53 +79,3 @@ export default function CategoryBar({
     </div>
   );
 }
-
-/* ---------- ESTILOS (SIN CAMBIOS) ---------- */
-const containerStyle: React.CSSProperties = {
-  backgroundColor: "#b36a5e",
-  display: "flex",
-  alignItems: "center",
-  gap: "1rem",
-  padding: "0.8rem 1.2rem",
-  borderRadius: "0 0 40px 40px",
-  marginBottom: "1.2rem",
-  justifyContent: "center",
-};
-
-const buttonStyle = (activo: boolean): React.CSSProperties => ({
-  background: "transparent",
-  border: "none",
-  color: "white",
-  fontWeight: "bold",
-  fontSize: "1.2rem",
-  cursor: "pointer",
-  paddingBottom: "6px",
-  borderBottom: activo
-    ? "3px solid #4fc3f7"
-    : "3px solid transparent",
-  whiteSpace: "nowrap",
-});
-
-const arrowStyle: React.CSSProperties = {
-  background: "rgba(255,255,255,0.15)",
-  border: "none",
-  borderRadius: "50%",
-  color: "white",
-  fontSize: "1.6rem",
-  cursor: "pointer",
-  width: "36px",
-  height: "36px",
-};
-
-const itemWrapper: React.CSSProperties = {
-  display: "flex",
-  alignItems: "center",
-  gap: "0.6rem",
-};
-
-const lineSeparator: React.CSSProperties = {
-  width: "1px",
-  height: "24px",
-  backgroundColor: "rgba(255,255,255,0.5)",
-  margin: "0 0.6rem",
-};
