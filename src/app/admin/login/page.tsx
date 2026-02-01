@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { API_URL } from "@/lib/api";
+import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -101,10 +102,13 @@ export default function LoginPage() {
       </div>
 
       <div className="hidden lg:block relative flex-1">
-        <img
-          src="/imagenes/fondo1.jpg"
+        <Image
+          src="/imagenes/fondo1.avif"
           alt="Imagen de fondo"
-          className="absolute inset-0 h-full w-full object-cover"
+          fill // Esto hace que ocupe todo el contenedor relativo
+          priority // Carga la imagen con prioridad (importante para el login)
+          className="object-cover"
+          sizes="50vw" // Le dice a Next que la imagen ocupará la mitad del ancho
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--primary-700)] to-transparent opacity-50"></div>
       </div>
