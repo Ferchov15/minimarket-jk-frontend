@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useCart } from "../../context/CartContext";
 
@@ -15,167 +14,84 @@ interface Product {
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addToCart, cartItems } = useCart();
-
   const priceNumber = Number(product.price) || 0;
   const descuentoNumber = Number(product.descuento) || 0;
   const productId = Number(product.id);
 
-  // ✅ Precio final con descuento aplicado
-  const precioFinal =
-    descuentoNumber > 0
-      ? priceNumber - (priceNumber * descuentoNumber) / 100
-      : priceNumber;
+  const precioFinal = descuentoNumber > 0 
+    ? priceNumber - (priceNumber * descuentoNumber) / 100 
+    : priceNumber;
 
-  const imageSrc = product.image?.trim()
-    ? product.image
-    : "/product-placeholder.png";
-
-  // Stock visible (solo en pantalla)
+  const imageSrc = product.image?.trim() ? product.image : "/product-placeholder.png";
   const [stockVisible, setStockVisible] = useState(product.stock ?? 0);
 
-  // 🟣 Recalcular stock en tiempo real dependiendo del carrito
   useEffect(() => {
-    const enCarrito =
-      cartItems.find((p: any) => Number(p.id) === productId)?.quantity || 0;
-
-    const totalOriginal = product.stock ?? 0;
-    const restante = totalOriginal - enCarrito;
-
+    const enCarrito = cartItems.find((p: any) => Number(p.id) === productId)?.quantity || 0;
+    const restante = (product.stock ?? 0) - enCarrito;
     setStockVisible(restante >= 0 ? restante : 0);
   }, [cartItems, product.stock, productId]);
 
-  // 🛒 Agregar al carrito
   const handleAdd = () => {
     if (stockVisible <= 0) return;
-
     addToCart({
       id: productId,
       name: product.name,
-      price: precioFinal, // ✅ se guarda con descuento aplicado
+      price: precioFinal,
       stock: product.stock ?? 0,
       image: product.image,
     });
-
     setStockVisible((prev) => (prev > 0 ? prev - 1 : 0));
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: "#4dd0e1",
-        padding: "1rem",
-        borderRadius: "10px",
-        width: "220px",
-        textAlign: "center",
-        boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-        transition: "transform 0.2s",
-      }}
-    >
-      <div style={{ position: "relative", width: "100%", height: "130px" }}>
+    <div className="bg-[#4dd0e1] p-3 sm:p-4 rounded-xl shadow-md flex flex-col items-center text-center transition-transform hover:scale-[1.02] h-full">
+      <div className="relative w-full h-32 sm:h-40 mb-2">
         <img
           src={imageSrc}
           alt={product.name}
-          style={{ width: "100%", height: "130px", objectFit: "contain" }}
+          className="w-full h-full object-contain"
         />
       </div>
 
-      <p
-        style={{
-          fontWeight: "bold",
-          fontSize: "1rem",
-          margin: "0.6rem 0 0.3rem 0",
-          textTransform: "capitalize",
-        }}
-      >
+      <h3 className="font-bold text-sm sm:text-base capitalize mb-1 line-clamp-1">
         {product.name}
-      </p>
+      </h3>
 
-      {/* ✅ PRECIO CON DESCUENTO */}
-      <p
-        style={{
-          fontWeight: "bold",
-          margin: "0.5rem 0",
-          borderBottom: "1px solid black",
-        }}
-      >
-        {descuentoNumber > 0 && (
-          <span
-            style={{
-              textDecoration: "line-through",
-              marginRight: "6px",
-              fontSize: "0.85rem",
-              color: "#444",
-            }}
-          >
-            ${priceNumber.toFixed(2)}
-          </span>
-        )}
-
-        ${precioFinal.toFixed(2)}{" "}
-        <span style={{ fontSize: "0.8rem" }}>Inc. IVA</span>
-      </p>
-
-      {/* ✅ ETIQUETA DE DESCUENTO */}
-      {descuentoNumber > 0 && (
-        <p
-          style={{
-            color: "darkred",
-            fontWeight: "bold",
-            fontSize: "0.8rem",
-            marginBottom: "4px",
-          }}
-        >
-          🔥 {descuentoNumber}% de descuento
+      <div className="w-full border-b border-black/20 mb-2 pb-2">
+        <p className="font-bold text-sm sm:text-lg">
+          {descuentoNumber > 0 && (
+            <span className="line-through mr-2 text-xs text-gray-700 opacity-70">
+              ${priceNumber.toFixed(2)}
+            </span>
+          )}
+          ${precioFinal.toFixed(2)} 
+          <span className="text-[10px] ml-1 font-normal">Inc. IVA</span>
         </p>
-      )}
+        
+        {descuentoNumber > 0 && (
+          <p className="text-red-800 font-bold text-[10px] sm:text-xs">
+            🔥 {descuentoNumber}% OFF
+          </p>
+        )}
+      </div>
 
-      <div
-        style={{
-          borderBottom: "1px solid black",
-          marginBottom: "0.5rem",
-          paddingBottom: "0.4rem",
-        }}
-      >
-        <p style={{ margin: 0, fontWeight: "bold" }}>Información del producto</p>
-
-        <p style={{ margin: "0.2rem 0", fontSize: "0.85rem" }}>
+      <div className="flex-grow w-full mb-3">
+        <p className="text-xs text-gray-800 line-clamp-2 mb-2 italic">
           {product.descripcion || "Sin descripción"}
         </p>
-
-        <p style={{ margin: 0, fontSize: "0.8rem" }}>
-          Disponibilidad:{" "}
-          <span
-            style={{
-              color: stockVisible > 0 ? "green" : "red",
-              fontWeight: "bold",
-            }}
-          >
-            {stockVisible > 0 ? `${stockVisible} unidades` : "Sin stock"}
+        <p className="text-[10px] sm:text-xs">
+          Stock: <span className={stockVisible > 0 ? "text-green-700 font-bold" : "text-red-600 font-bold"}>
+            {stockVisible > 0 ? `${stockVisible} un.` : "Agotado"}
           </span>
         </p>
       </div>
 
       <button
         disabled={stockVisible === 0}
-        style={{
-          padding: "0.4rem 1rem",
-          backgroundColor: stockVisible === 0 ? "#9e9e9e" : "#0288d1",
-          color: "white",
-          border: "none",
-          borderRadius: "6px",
-          fontWeight: "bold",
-          cursor: stockVisible === 0 ? "not-allowed" : "pointer",
-          transition: "background 0.2s",
-        }}
-        onMouseEnter={(e) =>
-          stockVisible > 0 &&
-          (e.currentTarget.style.backgroundColor = "#01579b")
-        }
-        onMouseLeave={(e) =>
-          stockVisible > 0 &&
-          (e.currentTarget.style.backgroundColor = "#0288d1")
-        }
         onClick={handleAdd}
+        className={`w-full py-2 rounded-lg font-bold text-white text-sm transition-colors ${
+          stockVisible === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-[#0288d1] hover:bg-[#01579b]"
+        }`}
       >
         {stockVisible === 0 ? "Sin stock" : "+ Agregar"}
       </button>

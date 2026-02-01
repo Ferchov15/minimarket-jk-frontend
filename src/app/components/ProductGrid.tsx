@@ -1,28 +1,12 @@
-import ProductCard from './ProductCard'
+"use client";
+import ProductCard from "./ProductCard";
 
-interface Product {
-  name: string
-  descripcion?: string
-  price: number
-  image: string
-  stock?: number
-}
-
-export default function ProductGrid({ products }: { products: Product[] }) {
+export default function ProductGrid({ products }: { products: any[] }) {
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-        gap: '1.5rem',
-        padding: '1rem',
-        maxWidth: '1200px',
-        margin: '0 auto'
-      }}
-    >
-      {products.map((p, i) => (
-        <ProductCard key={i} product={p} />
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-6 px-4 md:px-8 py-6">
+      {products.map((product) => (
+        <ProductCard key={product.id} product={product} />
       ))}
     </div>
-  )
+  );
 }
