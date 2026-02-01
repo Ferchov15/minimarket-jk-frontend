@@ -29,7 +29,7 @@ export default function Navbar({ search, onSearch }: NavbarProps) {
         href="/"
         className="text-white font-bold text-2xl hover:text-yellow-300 transition"
       >
-        MINIMARKET J.K
+        MINIMARKET F.J
       </Link>
 
       
