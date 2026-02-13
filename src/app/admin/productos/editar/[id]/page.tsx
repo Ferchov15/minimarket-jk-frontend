@@ -16,7 +16,7 @@ export default function EditarProducto() {
         "Confitería",
         "Abarrotes",
         "Lácteos",
-        "Cárnicos",
+        "Helados",
         "Cárnicos congelados",
         "Verduras",
         "Productos de aseo",

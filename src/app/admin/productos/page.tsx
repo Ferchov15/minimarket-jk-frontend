@@ -13,7 +13,7 @@ const CATEGORIAS = [
   "Confitería",
   "Abarrotes",
   "Lácteos",
-  "Cárnicos",
+  "Helados",
   "Cárnicos congelados",
   "Verduras",
   "Productos de aseo",
