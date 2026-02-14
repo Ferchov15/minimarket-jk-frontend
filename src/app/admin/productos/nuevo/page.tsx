@@ -45,7 +45,7 @@ export default function CrearProductoPage() {
     "Snacks",
     "Confitería",
     "Abarrotes",
-    "Lacteos",
+    "Lácteos",
     "Helados",
     "Cárnicos congelados",
     "Verduras",
